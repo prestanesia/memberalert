@@ -45,6 +45,7 @@ class MemberAlert extends Module
 
         $this->displayName = $this->l('Member Alert');
         $this->description = $this->l('Notify website owner for every new customer registration');
+        $this->ps_versions_compliancy = array('min' => '1.5', 'max' => _PS_VERSION_);
     }
 
     public function install()
