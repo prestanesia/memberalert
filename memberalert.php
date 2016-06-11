@@ -28,7 +28,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class Memberalert extends Module
+class MemberAlert extends Module
 {
     private $_merchant_mails;
     const __MA_MAIL_DELIMITOR__ = "\n";
@@ -57,64 +57,42 @@ class Memberalert extends Module
         return parent::uninstall();
     }
 
-    public function hookActionCustomerAccountAdd()
+    public function hookActionCustomerAccountAdd($params)
     {
         $postVars = $params['_POST'];
-
+        $registration_type = (int)Configuration::get('PS_REGISTRATION_PROCESS_TYPE');
+        
         if (empty($postVars)) {
             return false;
         }
 
-        $newsletter = 'No';
+        $newsletter = ((isset($postVars['newsletter']) && $postVars['newsletter'] == 1) ? 'Yes' : 'No');
+        $address2 = (isset($postVars['address2']) ? $postVars['address2'] : '');
+        $postcode = (isset($postVars['postcode']) ? $postVars['postcode'] : '');
+        $phone = (isset($postVars['phone']) ? $postVars['phone'] : '');
+        $phone_mobile = (isset($postVars['phone_mobile']) ? $postVars['phone_mobile'] : '');
 
-        if (isset($postVars['newsletter'])) {
-            if ($postVars['newsletter'] == 1) {
-                $newsletter='Yes';
-            }
-        }
+        $data = array(
+            '{firstname}' => $postVars['firstname']
+            ,'{lastname}' => $postVars['lastname']
+            ,'{email}' => $postVars['email']
+            ,'{newsletter}' => $newsletter
+            ,'{birthday}' => $postVars['months'].'/'.$postVars['days'].'/'.$postVars['years']
+            ,'{address1}' => ($registration_type == 0 ? 'N/A' : $postVars['address1'])
+            ,'{address2}' => ($registration_type == 0 ? 'N/A' : $address2)
+            ,'{postcode}' => ($registration_type == 0 ? 'N/A' : $postcode)
+            ,'{city}' => ($registration_type == 0 ? 'N/A' : $postVars['city'])
+            ,'{country}' => ($registration_type == 0 ? 'N/A' : Country::getNameById(Context::getContext()->cookie->id_lang, (int)$postVars['id_country']))
+            ,'{state}' => ($registration_type == 0 ? 'N/A' : State::getNameById((int)$postVars['id_state']))
+            ,'{phone}' => ($registration_type == 0 ? 'N/A' : $phone)
+            ,'{phone_mobile}' => ($registration_type == 0 ? 'N/A' : $phone_mobile)
+            ,'{company}' => ($registration_type == 0 ? 'N/A' : $postVars['company'])
+            ,'{other}' => ($registration_type == 0 ? 'N/A' : $postVars['other'])
+        );
 
-        if ((int)Configuration::get('PS_REGISTRATION_PROCESS_TYPE') == 0) {
-            $data = array(
-                '{firstname}' => $postVars['firstname']
-                ,'{lastname}' => $postVars['lastname']
-                ,'{email}' => $postVars['email']
-                ,'{newsletter}' => $newsletter
-                ,'{birthday}' => $postVars['months'].'/'.$postVars['days'].'/'.$postVars['years']
-                ,'{address1}' => 'N/A'
-                ,'{address2}' => 'N/A'
-                ,'{postcode}' => 'N/A'
-                ,'{city}' => 'N/A'
-                ,'{country}' => 'N/A'
-                ,'{state}' => 'N/A'
-                ,'{phone}' => 'N/A'
-                ,'{phone_mobile}' => 'N/A'
-                ,'{company}' => 'N/A'
-                ,'{other}' => 'N/A'
-            );
-        } else {
-            $data = array(
-                '{firstname}' => $postVars['firstname']
-                ,'{lastname}' => $postVars['lastname']
-                ,'{email}' => $postVars['email']
-                ,'{newsletter}' => $newsletter
-                ,'{birthday}' => $postVars['months'].'/'.$postVars['days'].'/'.$postVars['years']
-                ,'{address1}' => $postVars['address1']
-                ,'{address2}' => (isset($postVars['address2']) ? $postVars['address2'] : '')
-                ,'{postcode}' => (isset($postVars['postcode']) ? $postVars['postcode'] : '')
-                ,'{city}' => $postVars['city']
-                ,'{country}' => Country::getNameById(intval(Context::getContext()->cookie->id_lang), intval($postVars['id_country']))
-                ,'{state}' => State::getNameById(intval($postVars['id_state']))
-                ,'{phone}' => (isset($postVars['phone']) ? $postVars['phone'] : '')
-                ,'{phone_mobile}' => (isset($postVars['phone_mobile']) ? $postVars['phone_mobile'] : '')
-                ,'{company}' => $postVars['company']
-                ,'{other}' => $postVars['other']
-            );
-        }
-
+        $this->_merchant_mails = Configuration::get('PS_SHOP_EMAIL');
         if (!is_null(Configuration::get('MA_MERCHANT_MAILS')) && Configuration::get('MA_MERCHANT_MAILS') != '') {
             $this->_merchant_mails = strval(Configuration::get('MA_MERCHANT_MAILS'));
-        } else {
-            $this->_merchant_mails = Configuration::get('PS_SHOP_EMAIL');
         }
 
         $merchant_mails = explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails);

@@ -1,6 +1,6 @@
 Hello,
 
-A new member has been register in {shop_url} with the following details:
+New member has been register in {shop_url} with the following details:
 
 Name: {firstname} {lastname} 
 Email: {email}
@@ -18,4 +18,4 @@ Company: {company}
 Additional Info: {other}
 
 --
-MemberAlert module brought to you by prestanesia.com (prestashop module & theme development)
+MemberAlert by prestanesia
