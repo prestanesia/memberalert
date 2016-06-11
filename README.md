@@ -1,3 +1,5 @@
-MemberAlert
+MemberAlert Prestashop module
 ===
-Notification by email for new member registration
+Notification by email to admin for new customer registration
+
+Requirement: PrestaShop 1.5 or newer
