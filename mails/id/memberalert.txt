@@ -1,0 +1,21 @@
+Halo,
+
+Member baru telah mendaftar di {shop_url} dengan detail sebagai berikut:
+
+Nama: {firstname} {lastname} 
+Email: {email}
+Tanggal Lahir: {birthday}
+Berlangganan newsletter: {newsletter}
+Alamat: {address1}
+Alamat (2): {address2}
+Negara: {country}
+Kota: {state}
+Provinsi: {city}
+Kode Pos: {postcode}
+Telepon (rumah): {phone}
+Telepon (mobile): {phone_mobile}
+Perusahaan: {company}
+Catatan: {other}
+
+--
+MemberAlert module dibuat oleh prestanesia.com (prestashop module & theme development)

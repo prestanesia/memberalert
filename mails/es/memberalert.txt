@@ -1,0 +1,21 @@
+Hola,
+
+Un nuevo miembro ha sido registrar en {shop_url} con los siguientes datos:
+
+Nombre: {firstname} {lastname} 
+Correo electrónico: {email}
+Cumpleaños: {birthday}
+Inscríbase a nuestra newsletter: {newsletter}
+Dirección: {address1}
+Dirección (2): {address2}
+País: {country}
+Provincia: {state}
+Ciudad: {city}
+Código Postal: {postcode}
+Teléfono domicilio: {phone}
+Teléfono móvil: {phone_mobile}
+Empresa: {company}
+Información adicional: {other}
+
+--
+MemberAlert module brought to you by prestanesia.com (prestashop module & theme development)

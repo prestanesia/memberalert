@@ -1,0 +1,21 @@
+Bonjour,
+
+Un nouveau membre a été s'inscrire dans {shop_url} avec les détails suivants:
+
+Nom: {firstname} {lastname} 
+Email: {email}
+Date de naissance: {birthday}
+S'inscrire à la newsletter: {newsletter}
+Adresse: {address1}
+Adresse (2): {address2}
+Pays: {country}
+Etat: {state}
+Ville: {city}
+Code postal: {postcode}
+Téléphone domicile: {phone}
+Téléphone portable: {phone_mobile}
+Société: {company}
+Informations complémentaires: {other}
+
+--
+MemberAlert module brought to you by prestanesia.com (prestashop module & theme development)
