@@ -1,6 +1,6 @@
 Halo,
 
-Member baru telah mendaftar di {shop_url} dengan detail sebagai berikut:
+Pelanggan baru telah mendaftar di {shop_url} dengan detail sebagai berikut:
 
 Nama: {firstname} {lastname} 
 Email: {email}

@@ -45,7 +45,7 @@ class MemberAlert extends Module
 
         $this->displayName = $this->l('Member Alert');
         $this->description = $this->l('Notify website owner for every new customer registration');
-        $this->ps_versions_compliancy = array('min' => '1.5', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
     }
 
     public function install()
@@ -60,35 +60,28 @@ class MemberAlert extends Module
 
     public function hookActionCustomerAccountAdd($params)
     {
-        $postVars = $params['_POST'];
-        $registration_type = (int)Configuration::get('PS_REGISTRATION_PROCESS_TYPE');
+        $customer = $params['_POST'];
         
-        if (empty($postVars)) {
+        if (empty($customer)) {
             return false;
         }
 
-        $newsletter = ((isset($postVars['newsletter']) && $postVars['newsletter'] == 1) ? 'Yes' : 'No');
-        $address2 = (isset($postVars['address2']) ? $postVars['address2'] : '');
-        $postcode = (isset($postVars['postcode']) ? $postVars['postcode'] : '');
-        $phone = (isset($postVars['phone']) ? $postVars['phone'] : '');
-        $phone_mobile = (isset($postVars['phone_mobile']) ? $postVars['phone_mobile'] : '');
-
         $data = array(
-            '{firstname}' => $postVars['firstname']
-            ,'{lastname}' => $postVars['lastname']
-            ,'{email}' => $postVars['email']
-            ,'{newsletter}' => $newsletter
-            ,'{birthday}' => $postVars['months'].'/'.$postVars['days'].'/'.$postVars['years']
-            ,'{address1}' => ($registration_type == 0 ? 'N/A' : $postVars['address1'])
-            ,'{address2}' => ($registration_type == 0 ? 'N/A' : $address2)
-            ,'{postcode}' => ($registration_type == 0 ? 'N/A' : $postcode)
-            ,'{city}' => ($registration_type == 0 ? 'N/A' : $postVars['city'])
-            ,'{country}' => ($registration_type == 0 ? 'N/A' : Country::getNameById(Context::getContext()->cookie->id_lang, (int)$postVars['id_country']))
-            ,'{state}' => ($registration_type == 0 ? 'N/A' : State::getNameById((int)$postVars['id_state']))
-            ,'{phone}' => ($registration_type == 0 ? 'N/A' : $phone)
-            ,'{phone_mobile}' => ($registration_type == 0 ? 'N/A' : $phone_mobile)
-            ,'{company}' => ($registration_type == 0 ? 'N/A' : $postVars['company'])
-            ,'{other}' => ($registration_type == 0 ? 'N/A' : $postVars['other'])
+            '{firstname}' => $customer['customer_firstname']
+            ,'{lastname}' => $customer['customer_lastname']
+            ,'{company}' => (isset($customer['company']) ? $customer['company'] : '-')
+            ,'{email}' => $customer['email']
+            ,'{newsletter}' => ((isset($customer['newsletter']) && $customer['newsletter'] == 1) ? 'Yes' : 'No')
+            ,'{birthday}' => $customer['months'].'/'.$customer['days'].'/'.$customer['years']
+            ,'{address1}' => (isset($customer['address1']) ? $customer['address1'] : '-')
+            ,'{address2}' => (isset($customer['address2']) ? $customer['address2'] : '-')
+            ,'{postcode}' => (isset($customer['postcode']) ? $customer['postcode'] : '-')
+            ,'{city}' => (isset($customer['city']) ? $customer['city'] : '-')
+            ,'{country}' => Country::getNameById(Context::getContext()->cookie->id_lang, (int)$customer['id_country'])
+            ,'{state}' => State::getNameById((int)$customer['id_state'])
+            ,'{phone}' => (isset($customer['phone']) ? $customer['phone'] : '-')
+            ,'{phone_mobile}' => (isset($customer['phone_mobile']) ? $customer['phone_mobile'] : '-')
+            ,'{other}' => (isset($customer['other']) ? $customer['other'] : '-')
         );
 
         $this->_merchant_mails = Configuration::get('PS_SHOP_EMAIL');
